@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Event Details</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+<nav class="navbar">
+    <div class="logo">TicketBook</div>
+</nav>
+
+<div id="details" class="event-details"></div>
+
+<script>
+const params = new URLSearchParams(location.search);
+let id = params.get("id");
+
+if (!id) {
+    document.getElementById("details").innerHTML = "<p>Invalid event ID.</p>";
+} else {
+    fetch("api/event_details.php?id="+encodeURIComponent(id))
+    .then(res => res.json())
+    .then(e => {
+        if (e.error) {
+            document.getElementById("details").innerHTML = "<p>Event not found.</p>";
+            return;
+        }
+        document.getElementById("details").innerHTML = `
+            <img class="event-banner" src="${e.image}">
+            <div class="event-info">
+                <h2>${e.title}</h2>
+                <p class="description">${e.description}</p>
+                <div class="info-box">
+                    <p><b>Venue:</b> ${e.venue}</p>
+                    <p><b>Date:</b> ${e.date}</p>
+                </div>
+            </div>
+        `;
+    })
+    .catch(_ => {
+        document.getElementById("details").innerHTML = "<p>Failed to load event details.</p>";
+    });
+}
+</script>
+
+</body>
+</html>

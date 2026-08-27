@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Sign Up</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+<nav class="navbar"><div class="logo">TicketBook</div></nav>
+
+<div class="auth-container">
+    <h2>Create Account</h2>
+
+    <input id="signup_user" placeholder="Username">
+    <input id="signup_pass" type="password" placeholder="Password">
+
+    <button class="btn" onclick="signup()">Create Account</button>
+</div>
+
+<script>
+function signup(){
+    let user = document.getElementById("signup_user").value;
+    let pass = document.getElementById("signup_pass").value;
+
+    fetch("api/customer_signup.php", {
+        method:"POST",
+        body: new URLSearchParams({username:user, password:pass})
+    }).then(res=>res.text())
+    .then(d=>{
+        if(d.trim()=="success"){
+            alert("Account Created!");
+            location.href="login.html";
+        } else if (d.trim() == "exists") {
+            alert("Username already exists");
+        } else if(d.trim()== "NULLError"){
+            alert("Enter the required fields!");
+        }else {
+            alert("Something went wrong");
+        }
+    }).catch(_=>alert("Network error"));
+}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My Bookings</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+<nav class="navbar">
+    <div class="logo">TicketBook</div>
+    <ul class="nav-links">
+        <li><a href="events.html">All Events</a></li>
+        <li><a class="active" href="mybookings.html">My Bookings</a></li>
+    </ul>
+</nav>
+
+<section class="event-section">
+    <h2>My Booked Events</h2>
+    <div id="events" class="event-grid"></div>
+</section>
+
+<script>
+fetch("api/fetch_user_bookings.php")
+.then(res => res.json())
+.then(data => {
+    let box = document.getElementById("events");
+
+    if(data.length === 0){
+        box.innerHTML = "<p>No bookings yet.</p>";
+        return;
+    }
+
+    data.forEach(e => {
+        box.innerHTML += `
+        <div class="event-card">
+            <img src="${e.image}">
+            <h3>${e.title}</h3>
+            <p>Venue: ${e.venue}</p>
+            <p>Date: ${e.date}</p>
+            <button class="btn" onclick="cancelBooking(${e.bookingId})">Cancel</button>
+        </div>`;
+    });
+});
+function cancelBooking(id){
+    fetch("api/cancel_booking.php?id=" + id)
+    .then(res => res.text())
+    .then(d => {
+        if(d=="success"){
+            window.location.reload();
+        } else {
+            alert("Error cancelling");
+        }
+    });
+}
+
+</script>
+<a href="user_events.html" class="btn" style="margin-bottom:20px;">
+    Book Tickets
+</a>
+
+</body>
+</html>

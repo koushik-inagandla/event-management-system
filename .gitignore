@@ -1,0 +1,3 @@
+.vscode/
+api/test_db.php
+*.log

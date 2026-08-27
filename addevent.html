@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Add Event</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+<nav class="navbar"><div class="logo">TicketBook</div></nav>
+
+<div class="auth-container">
+    <h2>Add Event</h2>
+
+    <input id="title" placeholder="Title">
+    <input id="venue" placeholder="Venue">
+    <input id="date" placeholder="Event Date (YYYY-MM-DD HH:MM:SS)">
+    <input id="image" placeholder="Image URL">
+    <textarea id="desc" placeholder="Event Description"></textarea>
+
+    <button class="btn" onclick="addEvent()">Add Event</button>
+</div>
+
+<script>
+function addEvent(){
+    const params = new URLSearchParams();
+    params.append("title", document.getElementById("title").value);
+    params.append("venue", document.getElementById("venue").value);
+    params.append("date", document.getElementById("date").value);
+    params.append("image", document.getElementById("image").value);
+    params.append("description", document.getElementById("desc").value);
+
+    fetch("api/add_event_action.php", {
+        method:"POST",
+        body: params
+    })
+    .then(res => res.text())
+    .then(d => {
+        if(d.trim()=="success"){
+            alert("Event Added!");
+            document.getElementById("title").value = '';
+            document.getElementById("venue").value = '';
+            document.getElementById("date").value = '';
+            document.getElementById("image").value = '';
+            document.getElementById("desc").value = '';
+        }else{
+            alert("Error adding event!");
+        }
+    }).catch(_=>alert("Network error"));
+}
+</script>
+
+</body>
+</html>

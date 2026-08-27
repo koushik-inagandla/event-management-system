@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Book Tickets</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+<nav class="navbar"><div class="logo">TicketBook</div></nav>
+
+<div class="auth-container">
+    <h2>Book Tickets</h2>
+
+    <input id="seats" placeholder="Number of Seats">
+    
+    <button class="btn" onclick="bookNow()">Confirm Booking</button>
+</div>
+
+<script>
+const params = new URLSearchParams(window.location.search);
+let eventId = params.get("id");
+
+function bookNow(){
+    let seats = document.getElementById("seats").value;
+    
+
+    fetch("api/book_event.php", {
+        method:"POST",
+        body: new URLSearchParams({
+            eventId: eventId,
+            seats: seats,
+           
+        })
+    })
+    .then(res => res.text())
+    .then(d => {
+        if(d.trim()=="success"){
+            alert("Booking Successful!");
+            window.location = "mybookings.html";
+        } else {
+            alert("Error while booking");
+        }
+    });
+}
+</script>
+
+</body>
+</html>

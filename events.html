@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>All Events</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+<nav class="navbar">
+    <div class="logo">TicketBook</div>
+    <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a class="active" href="events.html">Events</a></li>
+    </ul>
+</nav>
+
+<section class="event-section">
+    <h2>All Events</h2>
+    <div id="events" class="event-grid"></div>
+</section>
+
+<script>
+fetch("api/fetch_events.php")
+.then(res => res.json())
+.then(data => {
+    let box = document.getElementById("events");
+
+    data.forEach(e => {
+        box.innerHTML += `
+        <div class="event-card">
+            <img src="${e.image}">
+            <h3>${e.title}</h3>
+            <p>Venue: ${e.venue}</p>
+            <p>Date: ${e.date}</p>
+            <a class="btn" href="event.html?id=${e.EventId}">View Details</a>
+        </div>`;
+    });
+});
+</script>
+
+</body>
+</html>
